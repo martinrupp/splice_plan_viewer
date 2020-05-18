@@ -56,6 +56,34 @@
 
         function generate()
         {
+            // parse splice plan
+            var text = document.getElementById("plan_text").value;
+            var root_node = parse_splice_plan(text);
+            // console.log(root_node);
+
+            display_treant(root_node);
+            // console.log( display_console(root_node) );
+        }
+
+        function display_console(node)
+        {
+            s = " ".repeat(node.intend*2)
+            s = s + " -> " + node.name + "( ";
+            for( let [i,j] of Object.entries(node.options) )
+            {
+                s = s + i + "=" + j + ", ";
+            }
+            // remove last ", "
+            s = s.slice(0, -2) + " )\n";
+            for( var i = 0; i<node.children.length; i++)
+                s = s + display_console(node.children[i]);
+            return s;
+
+        }
+
+        // display with treant.js
+        function display_treant(root_node)
+        {
             var body = document.getElementsByTagName('body')[0];
             var tbl = document.getElementById("splice_plan");
             if ( tbl )
@@ -69,11 +97,6 @@
             tbl.setAttribute("id", "splice_plan");
             tbl.style.width = '100%';
             body.appendChild(tbl);
-
-            var text = document.getElementById("plan_text").value;
-
-            var root_node = parse_splice_plan(text);
-            console.log(root_node);
 
             // todo: replace with https://gojs.net/latest/samples/orgChartEditor.html
 
