@@ -67,12 +67,20 @@
             text = text2;
             document.getElementById("plan_text").value = text;
             var root_node = parse_splice_plan(text);
-
-            document.getElementById("permalink").href = window.location + "#" + encodeURI(text);
             // console.log(root_node);
 
             display_treant(root_node);
-            window.location.hash = "";
+            if( window.location.hash && window.location.hash !== "" )
+            {
+                window.location.hash = encodeURI(text);
+                console.log(text)
+                console.log(encodeURI(text))
+                document.getElementById("permalink").href = window.location;
+            }
+            else
+            {
+                document.getElementById("permalink").href = window.location + '#' + encodeURI(text);
+            }
             // console.log( display_console(root_node) );
         }
 
