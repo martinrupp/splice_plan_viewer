@@ -24,6 +24,7 @@
 <textarea id="plan_text" rows="4" cols="200">...</textarea>
 <br>
 <button type="button" onclick="generate()">Generate</button>
+<a href="" id="permalink">Permalink to plan</a>
 
     <script src="https://fperucic.github.io/treant-js/vendor/raphael.js"></script>
     <script src="Treant.js"></script>
@@ -58,10 +59,20 @@
         {
             // parse splice plan
             var text = document.getElementById("plan_text").value;
+            var lines = text.split('\n');
+            var text2 = ""
+            for(var i = 0;i < lines.length;i++){
+                text2 = text2 + lines[i].trimRight() + "\n";
+            }
+            text = text2;
+            document.getElementById("plan_text").value = text;
             var root_node = parse_splice_plan(text);
+
+            document.getElementById("permalink").href = window.location + "#" + encodeURI(text);
             // console.log(root_node);
 
             display_treant(root_node);
+            window.location.hash = "";
             // console.log( display_console(root_node) );
         }
 
@@ -121,7 +132,16 @@
                 delete my_treant_tree;
             my_treant_tree = generate_treant_graph(config, root_node);
         }
-        fill_example("simple_join");
+        if( !window.location.hash || window.location.hash === "" )
+            fill_example("simple_join");
+        else
+        {
+            var text = decodeURI(window.location.hash).substring(1);
+            document.getElementById("plan_text").value = text;
+            if( text !== "" )
+                generate();
+        }
+
     </script>
 </body>
 </html>
